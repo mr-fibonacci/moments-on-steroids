@@ -11,10 +11,8 @@ import appStyles from "../../App.module.css";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
-import { useProfileRedirect } from "../../hooks/useProfileRedirect";
 
-function ProfileForm() {
-  useProfileRedirect();
+function ProfileEditForm() {
   const setCurrentUser = useSetCurrentUser();
   const { id } = useParams();
   const history = useHistory();
@@ -26,19 +24,25 @@ function ProfileForm() {
   const [errors, setErrors] = useState({});
   const { name, content, image } = profileData;
   const imageFile = useRef();
-  useEffect(() => {
-    handleMount();
-  }, []);
 
-  const handleMount = async () => {
-    try {
-      const { data } = await axiosReq.get(`/profiles/${id}/`);
-      const { name, content, image } = data;
-      setProfileData({ name, content, image });
-    } catch (err) {
-      console.log(err.request);
-    }
-  };
+  useEffect(() => {
+    const handleMount = async () => {
+      try {
+        const { data } = await axiosReq.get(`/profiles/${id}/`);
+        const { name, content, image, is_owner } = data;
+
+        if (is_owner) {
+          setProfileData({ name, content, image });
+        } else {
+          history.goBack();
+        }
+      } catch (err) {
+        console.log(err.request);
+      }
+    };
+
+    handleMount();
+  }, [history, id]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -154,4 +158,4 @@ function ProfileForm() {
   );
 }
 
-export default ProfileForm;
+export default ProfileEditForm;

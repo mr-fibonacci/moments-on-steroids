@@ -6,36 +6,47 @@ import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 import { useHistory } from "react-router-dom";
 import { axiosRes } from "../../api/axiosDefaults";
-import { useProfileRedirect } from "../../hooks/useProfileRedirect";
+import { useParams } from "react-router-dom";
+import {
+  useCurrentUser,
+  useSetCurrentUser,
+} from "../../contexts/CurrentUserContext";
 
 const UsernameForm = () => {
-  useProfileRedirect();
-  const history = useHistory();
   const [username, setUsername] = useState("");
   const [errors, setErrors] = useState({});
+
+  const history = useHistory();
+  const { id } = useParams();
+
+  const currentUser = useCurrentUser();
+  const setCurrentUser = useSetCurrentUser();
+
   useEffect(() => {
-    handleMount();
-  }, []);
-  const handleMount = async () => {
-    try {
-      const { data } = await axiosRes.get("/dj-rest-auth/user/");
-      setUsername(data.username);
-    } catch (err) {
-      console.log(err);
+    if (currentUser?.profile_id?.toString() === id) {
+      setUsername(currentUser.username);
+    } else {
+      history.push("/");
     }
-  };
+  }, [currentUser, history, id]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axiosRes.put("/dj-rest-auth/user/", {
+      await axiosRes.put("/dj-rest-auth/user/", {
         username,
       });
-      console.log("change user name data", data);
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
+        username,
+      }));
+      history.goBack();
     } catch (err) {
-      console.log(err.request);
+      // console.log(err);
       setErrors(err.response?.data);
     }
   };
+
   return (
     <Row>
       <Col className="py-2 mx-auto text-center" md={6}>

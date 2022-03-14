@@ -15,7 +15,7 @@ import { Image } from "react-bootstrap";
 import { useRedirect } from "../../hooks/useRedirect";
 
 function SignUpForm() {
-  useRedirect(false);
+  useRedirect("loggedIn");
   const history = useHistory();
   const [signUpData, setSignUpData] = useState({
     username: "",

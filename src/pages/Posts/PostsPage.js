@@ -22,27 +22,25 @@ function PostsPage({ filter = "", message }) {
   const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const { data: posts } = await axiosReq.get(
+          `/posts/?${filter}search=${query}`
+        );
+        setPosts(posts);
+        setHasLoaded(true);
+      } catch (err) {
+        console.log(err.request);
+      }
+    };
+
     setHasLoaded(false);
     const timer = setTimeout(() => {
       fetchPosts();
     }, 1000);
-    return () => clearTimeout(timer);
-  }, [query, pathname]);
 
-  const fetchPosts = async () => {
-    console.log("fetching data");
-    // refreshToken
-    // await refreshToken();
-    try {
-      const { data: posts } = await axiosReq.get(
-        `/posts/?${filter}search=${query}`
-      );
-      setPosts(posts);
-      setHasLoaded(true);
-    } catch (err) {
-      console.log(err.request);
-    }
-  };
+    return () => clearTimeout(timer);
+  }, [query, pathname, filter]);
 
   return (
     <Row className="h-100">

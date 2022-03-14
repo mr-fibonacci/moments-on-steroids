@@ -26,26 +26,27 @@ function PostEditForm() {
   const [errors, setErrors] = useState({});
   const imageFile = useRef();
   useEffect(() => {
-    handleMount();
-  }, []);
-
-  const handleMount = async () => {
-    try {
-      const { data } = await axiosReq.get(`/posts/${id}/`);
-      const { title, content, image, image_filter, is_owner } = data;
-      if (!is_owner) {
-        history.goBack();
+    const handleMount = async () => {
+      try {
+        const { data } = await axiosReq.get(`/posts/${id}/`);
+        const { title, content, image, image_filter, is_owner } = data;
+        if (!is_owner) {
+          history.goBack();
+        }
+        setPostData({
+          title,
+          content,
+          image,
+          image_filter,
+        });
+      } catch (err) {
+        console.log(err.response);
       }
-      setPostData({
-        title,
-        content,
-        image,
-        image_filter,
-      });
-    } catch (err) {
-      console.log(err.response);
-    }
-  };
+    };
+
+    handleMount();
+  }, [history, id]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();

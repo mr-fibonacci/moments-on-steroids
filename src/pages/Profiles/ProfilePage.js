@@ -46,56 +46,58 @@ function ProfilePage() {
     popularProfiles,
   } = profileState;
 
-  const fetchData = async () => {
-    try {
-      const [
-        { data: profile },
-        { data: profilePosts },
-        { data: followingProfiles },
-        { data: followedProfiles },
-        { data: popularProfiles },
-      ] = await Promise.all([
-        // all axiosReq
-        axiosReq.get(`/profiles/${id}/`),
-        axiosReq.get(`/posts/?owner__profile=${id}`),
-        axiosReq.get(`/profiles/?owner__followed__owner__profile=${id}`),
-        axiosReq.get(`/profiles/?owner__following__followed__profile=${id}`),
-        axiosReq.get("/profiles/?ordering=-followers_count"),
-      ]);
-
-      setHasLoaded(true);
-      setProfileState((prevState) => ({
-        ...prevState,
-        profile,
-        // profilePosts,
-        followingProfiles,
-        followedProfiles,
-        popularProfiles,
-      }));
-      setProfilePosts(profilePosts);
-    } catch (err) {
-      console.log(err.request);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [
+          { data: profile },
+          { data: profilePosts },
+          { data: followingProfiles },
+          { data: followedProfiles },
+          { data: popularProfiles },
+        ] = await Promise.all([
+          // all axiosReq
+          axiosReq.get(`/profiles/${id}/`),
+          axiosReq.get(`/posts/?owner__profile=${id}`),
+          axiosReq.get(`/profiles/?owner__followed__owner__profile=${id}`),
+          axiosReq.get(`/profiles/?owner__following__followed__profile=${id}`),
+          axiosReq.get("/profiles/?ordering=-followers_count"),
+        ]);
+
+        setHasLoaded(true);
+        setProfileState((prevState) => ({
+          ...prevState,
+          profile,
+          // profilePosts,
+          followingProfiles,
+          followedProfiles,
+          popularProfiles,
+        }));
+        setProfilePosts(profilePosts);
+      } catch (err) {
+        console.log(err.request);
+      }
+    };
+
     fetchData();
   }, [id]);
-  const fetchCurrentUserProfile = async () => {
-    try {
-      const { data: currentUserProfile } = await axiosReq.get(
-        `/profiles/${currentUser.profile_id}/`
-      );
-      console.log("currentUserProfile:", currentUserProfile);
-      setProfileState((prevState) => ({
-        ...prevState,
-        currentUserProfile,
-      }));
-    } catch (err) {
-      console.log(err.request);
-    }
-  };
+
   useEffect(() => {
+    const fetchCurrentUserProfile = async () => {
+      try {
+        const { data: currentUserProfile } = await axiosReq.get(
+          `/profiles/${currentUser.profile_id}/`
+        );
+        console.log("currentUserProfile:", currentUserProfile);
+        setProfileState((prevState) => ({
+          ...prevState,
+          currentUserProfile,
+        }));
+      } catch (err) {
+        console.log(err.request);
+      }
+    };
+
     fetchCurrentUserProfile();
   }, [currentUser]);
 

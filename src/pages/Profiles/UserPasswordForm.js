@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -10,11 +10,15 @@ import appStyles from "../../App.module.css";
 
 import { useHistory } from "react-router-dom";
 import { axiosRes } from "../../api/axiosDefaults";
-import { useProfileRedirect } from "../../hooks/useProfileRedirect";
+import { useParams } from "react-router-dom";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
 const UserPasswordForm = () => {
-  useProfileRedirect();
   const history = useHistory();
+  const { id } = useParams();
+
+  const currentUser = useCurrentUser();
+
   const [userData, setUserData] = useState({
     new_password1: "",
     new_password2: "",
@@ -23,25 +27,31 @@ const UserPasswordForm = () => {
   const { new_password1, new_password2, old_password } = userData;
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    if (currentUser?.profile_id?.toString() !== id) {
+      // redirect user if they are not the owner of this profile
+      history.push("/");
+    }
+  }, [currentUser, history, id]);
+
   const handleChange = (event) => {
     setUserData({
       ...userData,
       [event.target.name]: event.target.value,
     });
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axiosRes.post(
-        "/dj-rest-auth/password/change/",
-        userData
-      );
-      console.log("change user name data", data);
+      await axiosRes.post("/dj-rest-auth/password/change/", userData);
+      history.goBack();
     } catch (err) {
-      console.log(err.request);
+      // console.log(err);
       setErrors(err.response?.data);
     }
   };
+
   return (
     <Row>
       <Col className="py-2 mx-auto text-center" md={6}>

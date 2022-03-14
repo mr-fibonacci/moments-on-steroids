@@ -75,7 +75,7 @@ export const CurrentUserProvider = ({ children }) => {
         return Promise.reject(error);
       }
     );
-  }, []);
+  }, [history]);
 
   useEffect(() => {
     handleMount();

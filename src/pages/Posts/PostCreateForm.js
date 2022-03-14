@@ -16,7 +16,7 @@ import { axiosReq } from "../../api/axiosDefaults";
 import { useRedirect } from "../../hooks/useRedirect";
 
 function PostCreateForm() {
-  useRedirect();
+  useRedirect("loggedOut");
   const history = useHistory();
   const [postData, setPostData] = useState({
     title: "",

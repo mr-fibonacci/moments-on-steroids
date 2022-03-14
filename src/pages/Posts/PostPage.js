@@ -23,21 +23,22 @@ function PostPage() {
   const [post, setPost] = useState({ results: [] });
   const [comments, setComments] = useState({ results: [] });
   useEffect(() => {
+    const handleMount = async () => {
+      try {
+        const [{ data: post }, { data: comments }] = await Promise.all([
+          axiosReq.get(`/posts/${id}`),
+          axios.get(`/comments/?post=${id}`),
+        ]);
+        console.log("post", post);
+        setPost({ results: [post] });
+        setComments(comments);
+      } catch (err) {
+        console.log(err.request);
+      }
+    };
+
     handleMount();
-  }, []);
-  const handleMount = async () => {
-    try {
-      const [{ data: post }, { data: comments }] = await Promise.all([
-        axiosReq.get(`/posts/${id}`),
-        axios.get(`/comments/?post=${id}`),
-      ]);
-      console.log("post", post);
-      setPost({ results: [post] });
-      setComments(comments);
-    } catch (err) {
-      console.log(err.request);
-    }
-  };
+  }, [id]);
 
   const handleEdit = () => {
     history.push(`/posts/${id}/edit`);

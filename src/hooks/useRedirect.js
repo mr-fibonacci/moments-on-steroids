@@ -1,23 +1,26 @@
-import { useEffect } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
+import { useHistory } from "react-router";
 
-export const useRedirect = (redirectUnauthenticated = true) => {
+export const useRedirect = (userAuthStatus) => {
   const history = useHistory();
-  const handleMount = async () => {
-    try {
-      await axios.post("/dj-rest-auth/token/refresh/");
-      if (!redirectUnauthenticated) {
-        history.goBack();
-      }
-    } catch (err) {
-      console.log(err.request);
-      if (redirectUnauthenticated) {
-        history.goBack();
-      }
-    }
-  };
+
   useEffect(() => {
+    const handleMount = async () => {
+      try {
+        await axios.post("/dj-rest-auth/token/refresh/");
+        // if user is logged in, the code below will run
+        if (userAuthStatus === "loggedIn") {
+          history.push("/");
+        }
+      } catch (err) {
+        // if user is not logged in, the code below will run
+        if (userAuthStatus === "loggedOut") {
+          history.push("/");
+        }
+      }
+    };
+
     handleMount();
-  }, []);
+  }, [history, userAuthStatus]);
 };
