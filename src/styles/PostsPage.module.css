@@ -1,0 +1,14 @@
+.SearchBar input {
+  /* background-color: #e4f5f9; */
+  border-radius: 20px;
+  color: #242a3d;
+  padding-left: 40px;
+  margin-bottom: 16px;
+}
+
+.SearchBar::before {
+  content: url("../assets/search.svg");
+  margin-left: 15px;
+  position: absolute;
+  margin-top: 10px;
+}

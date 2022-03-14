@@ -1,0 +1,28 @@
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #fff;
+  border-radius: 100px;
+  background-color: #2142b2;
+}
+
+.nav-pills {
+  margin: 10px 0px;
+}
+
+.nav-pills {
+  justify-content: center;
+}
+
+.ProfileImage {
+  object-fit: cover;
+  height: 120px;
+  width: 120px;
+  margin: 4px;
+}
+
+@media screen and (max-width: 991px) {
+  .ProfileImage {
+    width: 250px;
+    height: 250px;
+  }
+}

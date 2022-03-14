@@ -1,0 +1,25 @@
+.Icon {
+  padding: 0px 5px;
+  line-height: 45px;
+}
+
+.NavIcon {
+  display: block;
+}
+
+.Icon:hover {
+  cursor: pointer;
+}
+
+.Icon:hover path {
+  fill: #2142b2;
+}
+
+.Icon:hover g {
+  opacity: 1;
+}
+
+.Icon svg {
+  height: 27px;
+  width: 27px;
+}

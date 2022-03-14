@@ -1,0 +1,78 @@
+.App {
+  font-family: "DM Sans", sans-serif;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+* {
+  box-sizing: border-box;
+}
+a {
+  color: #555555;
+  transition: color ease-in-out 0.3s;
+}
+a:hover {
+  text-decoration: none;
+}
+a:hover i {
+  color: #2142b2;
+  transition: color ease-in-out 0.3s;
+}
+input[type="file"] {
+  display: none;
+}
+
+i {
+  color: #cfced3;
+  font-size: 1.6rem;
+  padding: 10px;
+  padding-left: 15px;
+  vertical-align: middle;
+}
+
+i:hover {
+  cursor: pointer;
+  transition: color ease-in-out 0.3s;
+  color: #2142b2;
+}
+
+.Content {
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 2px;
+  border: 1px solid #dadadf;
+}
+.Image {
+  max-height: 40vh;
+  max-width: 100%;
+  object-fit: contain;
+}
+figure {
+  text-align: center;
+  display: inline-block;
+}
+.FillerImage {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+/* scrollbar */
+/* width */
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
