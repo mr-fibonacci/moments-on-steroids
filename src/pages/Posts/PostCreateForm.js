@@ -5,7 +5,6 @@ import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useHistory } from "react-router";
-import { ReactComponent as Upload } from "../../assets/upload.svg";
 import btnStyles from "../../styles/Button.module.css";
 import Asset from "../../components/Asset";
 import FilterSlider from "../../components/FilterSlider";
@@ -134,7 +133,7 @@ function PostCreateForm() {
                   className="d-flex justify-content-center"
                   htmlFor="image-upload"
                 >
-                  <Asset children={<Upload />} />
+                  <Asset upload />
                 </Form.Label>
               )}
               {errors?.image?.map((message, idx) => (

@@ -6,7 +6,6 @@ import appStyles from "../../App.module.css";
 import Image from "react-bootstrap/Image";
 import { Link } from "react-router-dom";
 import Asset from "../../components/Asset";
-import { Spinner } from "react-bootstrap";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 
 const PopularProfiles = ({ mobile }) => {
@@ -77,7 +76,7 @@ const PopularProfiles = ({ mobile }) => {
       className={`${appStyles.Content} d-block d-lg-none text-center mb-3`}
     >
       {!hasLoaded ? (
-        <Asset children={<Spinner animation="border" />} />
+        <Asset spinner />
       ) : (
         <>
           <div className="my-1">Most followed profiles.</div>
@@ -116,7 +115,7 @@ const PopularProfiles = ({ mobile }) => {
   ) : (
     <Container className={appStyles.Content}>
       {!hasLoaded ? (
-        <Asset children={<Spinner animation="border" />} />
+        <Asset spinner />
       ) : (
         <>
           <p>Most followed profiles.</p>

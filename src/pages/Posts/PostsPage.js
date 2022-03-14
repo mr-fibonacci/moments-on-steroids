@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
-import Spinner from "react-bootstrap/Spinner";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
@@ -9,7 +8,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useLocation } from "react-router";
 import Post from "./Post";
 import { fetchMoreData } from "../../utils/utils";
-import { ReactComponent as NoResults } from "../../assets/no-results.svg";
 
 import styles from "../../styles/PostsPage.module.css";
 import Asset from "../../components/Asset";
@@ -68,20 +66,20 @@ function PostsPage({ filter = "", message }) {
                 dataLength={posts.results.length}
                 next={() => fetchMoreData(posts, setPosts)}
                 hasMore={!!posts.next}
-                loader={<Asset children={<Spinner animation="border" />} />}
+                loader={<Asset spinner />}
                 children={posts.results.map((post) => (
                   <Post key={post.id} {...post} setPosts={setPosts} />
                 ))}
               />
             ) : (
               <Container className={appStyles.Content}>
-                <Asset children={<NoResults />} message={message} />
+                <Asset noResults message={message} />
               </Container>
             )}
           </>
         ) : (
           <Container className={appStyles.Content}>
-            <Asset children={<Spinner animation="border" />} />
+            <Asset spinner />
           </Container>
         )}
       </Col>
