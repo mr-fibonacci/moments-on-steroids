@@ -8,6 +8,7 @@ import React, {
 import axios from "axios";
 import { axiosReq, axiosRes } from "../api/axiosDefaults";
 import { useHistory } from "react-router-dom";
+import { removeTokenTimestamp, shouldRefreshToken } from "../utils/utils";
 
 const CurrentUserContext = createContext();
 const SetCurrentUserContext = createContext();
@@ -22,53 +23,42 @@ export const CurrentUserProvider = ({ children }) => {
   useMemo(() => {
     axiosReq.interceptors.request.use(
       async (config) => {
-        console.log("inside req interceptor");
-        try {
-          await axios.post("/dj-rest-auth/token/refresh/");
-          console.log("refreshed the token successfully");
-        } catch (err) {
-          console.log(err.request);
-          setCurrentUser((prevCurrentUser) => {
-            if (prevCurrentUser) {
-              history.push("/signin");
-            }
-            return null;
-          });
-          console.log("ERR1!");
-          return config;
-        }
-        console.log("ERR2?");
-        return config;
-      },
-      (err) => {
-        console.log("REQ interceptor error:");
-        return Promise.reject(err);
-      }
-    );
-    axiosRes.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        console.log(
-          error,
-          error?.request,
-          "inside interceptor, ERROR STATUS:",
-          error?.response?.status,
-          "ERROR CONFIG:",
-          error?.config
-        );
-        if (error?.response?.status === 401) {
-          console.log("ACCESS TOKEN EXPIRED");
+        if (shouldRefreshToken()) {
           try {
             await axios.post("/dj-rest-auth/token/refresh/");
-            console.log("ACCESS TOKEN REFRESHED");
           } catch (err) {
-            console.log("REFRESH TOKEN EXPIRED", err.request);
+            console.log(err.request);
             setCurrentUser((prevCurrentUser) => {
               if (prevCurrentUser) {
                 history.push("/signin");
               }
               return null;
             });
+            removeTokenTimestamp();
+            return config;
+          }
+        }
+        return config;
+      },
+      (err) => {
+        return Promise.reject(err);
+      }
+    );
+
+    axiosRes.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (error?.response?.status === 401) {
+          try {
+            await axios.post("/dj-rest-auth/token/refresh/");
+          } catch (err) {
+            setCurrentUser((prevCurrentUser) => {
+              if (prevCurrentUser) {
+                history.push("/signin");
+              }
+              return null;
+            });
+            removeTokenTimestamp();
           }
           return axios(error.config);
         }
@@ -89,6 +79,7 @@ export const CurrentUserProvider = ({ children }) => {
       console.log(err.request);
     }
   };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <SetCurrentUserContext.Provider value={setCurrentUser}>

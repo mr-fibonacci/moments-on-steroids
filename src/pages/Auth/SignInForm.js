@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
-import { useHistory } from "react-router";
 import styles from "../../styles/SignInUpForm.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import { NavLink } from "react-router-dom";
@@ -13,40 +12,34 @@ import Row from "react-bootstrap/Row";
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
 import appStyles from "../../App.module.css";
-import { useLastLocation } from "react-router-last-location";
 import { useRedirect } from "../../hooks/useRedirect";
+import { setTokenTimestamp } from "../../utils/utils";
+import { useHistory } from "react-router-dom";
 
 function SignInForm() {
-  const setCurrentUser = useSetCurrentUser();
   const history = useHistory();
-  const lastLocation = useLastLocation();
+  const setCurrentUser = useSetCurrentUser();
+
   useRedirect("loggedIn");
-  console.log("last location:", lastLocation);
   const [errors, setErrors] = useState({});
   const [signInData, setSignInData] = useState({
     username: "",
     password: "",
   });
   const { username, password } = signInData;
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const { data } = await axios.post("/dj-rest-auth/login/", signInData);
       setCurrentUser(data.user);
-
-      if (
-        lastLocation.pathname === "/signup" ||
-        lastLocation.pathname === "/signin" ||
-        !lastLocation
-      ) {
-        history.push("/");
-      } else {
-        history.goBack();
-      }
+      setTokenTimestamp(data);
+      history.goBack();
     } catch (err) {
       setErrors(err.response?.data);
     }
   };
+
   const handleChange = (event) => {
     setSignInData({
       ...signInData,

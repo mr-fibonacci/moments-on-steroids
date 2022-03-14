@@ -1,3 +1,4 @@
+import jwtDecode from "jwt-decode";
 import { axiosReq } from "../api/axiosDefaults";
 
 export const fetchMoreData = async (resource, setResource) => {
@@ -15,25 +16,39 @@ export const fetchMoreData = async (resource, setResource) => {
   }
 };
 
-export const fetchMoreDataState = async (url, attr, setState) => {
+export const fetchMoreDataState = async (resource, setState) => {
+  // get the resource object variable name (the actual string)
+  const [resourceName] = Object.keys({ resource: "" });
   try {
-    const { data } = await axiosReq.get(url);
-    console.log("more data", data);
+    const { data } = await axiosReq.get(resource.next);
     setState((prevState) => ({
       ...prevState,
-      [attr]: {
-        ...prevState[attr],
+      [resourceName]: {
+        ...prevState[resourceName],
         next: data.next,
         results: data?.results.reduce((acc, cur) => {
           return acc.some((result) => result.id === cur.id)
             ? acc
             : [...acc, cur];
-        }, prevState[attr].results),
+        }, prevState[resourceName].results),
       },
     }));
   } catch (err) {
     console.log(err.request);
   }
+};
+
+export const setTokenTimestamp = (data) => {
+  const refreshTokenTimestamp = jwtDecode(data?.refresh_token).exp;
+  localStorage.setItem("refreshTokenTimestamp", refreshTokenTimestamp);
+};
+
+export const shouldRefreshToken = () => {
+  return !!localStorage.getItem("refreshTokenTimestamp");
+};
+
+export const removeTokenTimestamp = () => {
+  localStorage.removeItem("refreshTokenTimestamp");
 };
 
 export const IMAGE_FILTERS = [

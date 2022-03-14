@@ -330,11 +330,7 @@ function ProfilePage() {
                   <InfiniteScroll
                     dataLength={followedProfiles?.results.length}
                     next={() =>
-                      fetchMoreDataState(
-                        followedProfiles.next,
-                        "followedProfiles",
-                        setProfileState
-                      )
+                      fetchMoreDataState(followedProfiles, setProfileState)
                     }
                     hasMore={!!followedProfiles.next}
                     loader={<Asset spinner />}
@@ -362,11 +358,7 @@ function ProfilePage() {
                   <InfiniteScroll
                     dataLength={followingProfiles?.results?.length}
                     next={() =>
-                      fetchMoreDataState(
-                        followingProfiles.next,
-                        "followingProfiles",
-                        setProfileState
-                      )
+                      fetchMoreDataState(followingProfiles, setProfileState)
                     }
                     hasMore={!!followingProfiles.next}
                     loader={<Asset spinner />}
