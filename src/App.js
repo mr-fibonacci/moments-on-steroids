@@ -15,6 +15,7 @@ import styles from "./App.module.css";
 import { useCurrentUser } from "./contexts/CurrentUserContext";
 import UsernameForm from "./pages/Profiles/UsernameForm";
 import UserPasswordForm from "./pages/Profiles/UserPasswordForm";
+import NotFound from "./components/NotFound";
 
 function App() {
   const currentUser = useCurrentUser();
@@ -76,6 +77,7 @@ function App() {
             path="/profiles/:id/edit/password"
             render={() => <UserPasswordForm />}
           />
+          <Route render={() => <NotFound />} />
         </Switch>
       </Container>
     </div>
