@@ -3,16 +3,16 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
-import { LastLocationProvider } from "react-router-last-location";
 import { CurrentUserProvider } from "./contexts/CurrentUserContext";
+import { ProfileDataProvider } from "./contexts/ProfileDataContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <CurrentUserProvider>
-        <LastLocationProvider>
+        <ProfileDataProvider>
           <App />
-        </LastLocationProvider>
+        </ProfileDataProvider>
       </CurrentUserProvider>
     </Router>
   </React.StrictMode>,
