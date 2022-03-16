@@ -14,9 +14,12 @@ import Asset from "../../components/Asset";
 import appStyles from "../../App.module.css";
 import PopularProfiles from "../Profiles/PopularProfiles";
 import { axiosReq } from "../../api/axiosDefaults";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
 function PostsPage({ filter = "", message }) {
   const { pathname } = useLocation();
+  const currentUser = useCurrentUser();
+
   const [posts, setPosts] = useState({ results: [] });
   const [query, setQuery] = useState("");
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -40,7 +43,7 @@ function PostsPage({ filter = "", message }) {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [query, pathname, filter]);
+  }, [query, pathname, filter, currentUser]);
 
   return (
     <Row className="h-100">
