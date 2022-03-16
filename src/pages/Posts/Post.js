@@ -9,6 +9,7 @@ import MoreDropdown from "../../components/MoreDropdown";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { axiosRes } from "../../api/axiosDefaults";
+import Icon from "../../components/Icon";
 
 function Post(props) {
   const {
@@ -102,27 +103,27 @@ function Post(props) {
               placement="top"
               overlay={<Tooltip>Can't like own posts!</Tooltip>}
             >
-              <i className="far fa-heart" />
+              <Icon heart />
             </OverlayTrigger>
           ) : like_id ? (
             <span onClick={handleUnlike}>
-              <i className="fas fa-heart" />
+              <Icon heart />
             </span>
           ) : currentUser ? (
             <span onClick={handleLike}>
-              <i className="far fa-heart" />
+              <Icon heart />
             </span>
           ) : (
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Log in to like posts!</Tooltip>}
             >
-              <i className="far fa-heart" />
+              <Icon heart />
             </OverlayTrigger>
           )}
           {likes_count}
           <Link to={`/posts/${id}`}>
-            <i className="far fa-comments" />
+            <Icon comment />
           </Link>
           {comments_count}
           <span className="mx-2">{`#${image_filter}`}</span>

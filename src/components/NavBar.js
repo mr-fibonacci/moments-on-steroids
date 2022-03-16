@@ -13,6 +13,7 @@ import Avatar from "./Avatar";
 import logo from "../assets/logo.svg";
 import styles from "../styles/NavBar.module.css";
 import { removeTokenTimestamp } from "../utils/utils";
+import Icon from "./Icon";
 
 function NavBar() {
   const currentUser = useCurrentUser();
@@ -46,7 +47,7 @@ function NavBar() {
         </NavLink>
         {currentUser && (
           <NavLink exact activeClassName={styles.Active} to={"/posts/create"}>
-            <i className="far fa-plus-square" /> add post
+            <Icon add text="add post" />
           </NavLink>
         )}
         <Navbar.Toggle
@@ -59,20 +60,16 @@ function NavBar() {
             {currentUser ? (
               <>
                 <NavLink exact activeClassName={styles.Active} to={"/"}>
-                  <i className="fas fa-home" />
-                  home
+                  <Icon home text="home" />
                 </NavLink>
                 <NavLink activeClassName={styles.Active} to={"/feed"}>
-                  <i className="fas fa-stream" />
-                  feed
+                  <Icon feed text="feed" />
                 </NavLink>
                 <NavLink activeClassName={styles.Active} to={"/liked"}>
-                  <i className="fas fa-heart" />
-                  liked
+                  <Icon heart text="liked" />
                 </NavLink>
                 <NavLink exact to="/" onClick={handleSignOut}>
-                  <i className="fas fa-sign-out-alt" />
-                  sign out
+                  <Icon signOut text="sign out" />
                 </NavLink>
                 <NavLink
                   activeClassName={styles.Active}
@@ -84,16 +81,13 @@ function NavBar() {
             ) : (
               <>
                 <NavLink exact activeClassName={styles.Active} to={"/"}>
-                  <i className="fas fa-home" />
-                  home
+                  <Icon home text="home" />
                 </NavLink>
                 <NavLink activeClassName={styles.Active} to="/signin">
-                  <i className="fas fa-sign-in-alt" />
-                  sign in
+                  <Icon signIn text="sign in" />
                 </NavLink>
                 <NavLink activeClassName={styles.Active} to="/signup">
-                  <i className="fas fa-user-plus" />
-                  sign up
+                  <Icon signUp text="sign up" />
                 </NavLink>
               </>
             )}
