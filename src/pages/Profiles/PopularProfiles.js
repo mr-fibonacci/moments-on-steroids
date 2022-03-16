@@ -12,14 +12,14 @@ import {
 } from "../../contexts/ProfileDataContext";
 
 const PopularProfiles = ({ mobile }) => {
-  const { profileData, hasProfileDataLoaded } = useProfileData();
+  const { profileData, globalProfileDataHasLoaded } = useProfileData();
   const { popularProfiles } = profileData;
   const { handleFollow, handleUnfollow } = useSetProfileData();
   return mobile ? (
     <Container
       className={`${appStyles.Content} d-block d-lg-none text-center mb-3`}
     >
-      {!hasProfileDataLoaded ? (
+      {!globalProfileDataHasLoaded ? (
         <Asset spinner />
       ) : (
         <>
@@ -58,12 +58,12 @@ const PopularProfiles = ({ mobile }) => {
     </Container>
   ) : (
     <Container className={appStyles.Content}>
-      {!hasProfileDataLoaded ? (
+      {!globalProfileDataHasLoaded ? (
         <Asset spinner />
       ) : (
         <>
           <p>Most followed profiles.</p>
-          {popularProfiles.results?.map((profile) => (
+          {popularProfiles?.results?.map((profile) => (
             <Profile
               key={profile.id}
               profile={profile}

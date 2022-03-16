@@ -30,14 +30,14 @@ function ProfilePage() {
   const { id } = useParams();
   const currentUser = useCurrentUser();
 
-  const { profileData, hasProfileDataLoaded } = useProfileData();
+  const { profileData, pageProfileDataHasLoaded } = useProfileData();
   const { pageProfile, followingProfiles, followedProfiles } = profileData;
   const [profile] = pageProfile.results;
 
   const { setProfileData, handleFollow, handleUnfollow } = useSetProfileData();
 
   const [profilePosts, setProfilePosts] = useState({ results: [] });
-  const [hasLoaded, setHasLoaded] = useState(false);
+  const [profilePostsHaveLoaded, setProfilePostsHaveLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,11 +50,11 @@ function ProfilePage() {
       } catch (err) {
         console.log(err.request);
       } finally {
-        setHasLoaded(true);
+        setProfilePostsHaveLoaded(true);
       }
     };
 
-    setHasLoaded(false);
+    setProfilePostsHaveLoaded(false);
     fetchData();
   }, [id]);
 
@@ -63,7 +63,7 @@ function ProfilePage() {
       <Col className="py-2 p-0 p-lg-2" lg={8}>
         <PopularProfiles mobile={true} />
         <Container className={appStyles.Content}>
-          {hasProfileDataLoaded ? (
+          {pageProfileDataHasLoaded ? (
             <>
               {profile?.is_owner && <ProfileEditDropdown id={profile?.id} />}
               <Row noGutters className="px-3">
@@ -123,7 +123,7 @@ function ProfilePage() {
               <hr />
               <Tabs variant="pills">
                 <Tab eventKey="posts" title="posts">
-                  {hasLoaded ? (
+                  {profilePostsHaveLoaded ? (
                     <InfiniteScroll
                       dataLength={profilePosts?.results.length}
                       next={() => fetchMoreData(profilePosts, setProfilePosts)}
@@ -213,7 +213,7 @@ function ProfilePage() {
         </Container>
       </Col>
       <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
-        {hasLoaded ? <PopularProfiles /> : <Asset spinner />}
+        <PopularProfiles />
       </Col>
     </Row>
   );

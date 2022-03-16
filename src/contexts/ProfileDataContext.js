@@ -21,7 +21,10 @@ export const ProfileDataProvider = ({ children }) => {
 
   const currentUser = useCurrentUser();
 
-  const [hasProfileDataLoaded, setHasProfileDataLoaded] = useState(false);
+  const [pageProfileDataHasLoaded, setPageProfileDataHasLoaded] =
+    useState(false);
+  const [globalProfileDataHasLoaded, setGlobalProfileDataHasLoaded] =
+    useState(false);
 
   const [profileData, setProfileData] = useState({
     currentUserProfile: { results: [] },
@@ -118,13 +121,12 @@ export const ProfileDataProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPageProfileData = async () => {
       try {
         const [
           { data: pageProfile },
           { data: followedProfiles },
           { data: followingProfiles },
-          { data: popularProfiles },
         ] = await Promise.all([
           axiosReq.get(`/profiles/${pageProfileId || ""}`),
           axiosReq.get(
@@ -135,30 +137,68 @@ export const ProfileDataProvider = ({ children }) => {
           axiosReq.get(
             `/profiles/?owner__followed__owner__profile=${pageProfileId || ""}`
           ),
-          axiosReq.get("/profiles/?ordering=-followers_count"),
         ]);
 
-        setProfileData({
-          currentUserProfile: {
-            results: currentUser?.profile ? [currentUser?.profile] : [],
-          },
+        setProfileData((prevState) => ({
+          ...prevState,
           pageProfile: { results: [pageProfile] },
           followedProfiles,
           followingProfiles,
-          popularProfiles,
-        });
+        }));
       } catch (err) {
+        setProfileData((prevState) => ({
+          ...prevState,
+          pageProfile: { results: [] },
+          followedProfiles: { results: [] },
+          followingProfiles: { results: [] },
+        }));
       } finally {
-        setHasProfileDataLoaded(true);
+        setPageProfileDataHasLoaded(true);
       }
     };
 
-    setHasProfileDataLoaded(false);
-    fetchData();
-  }, [pageProfileId, currentUser]);
+    setPageProfileDataHasLoaded(false);
+    fetchPageProfileData();
+  }, [pageProfileId]);
+
+  useEffect(() => {
+    const fetchGlobalProfileData = async () => {
+      try {
+        const { data: popularProfiles } = await axiosReq.get(
+          "/profiles/?ordering=-followers_count"
+        );
+
+        setProfileData((prevState) => ({
+          ...prevState,
+          currentUserProfile: {
+            results: currentUser?.profile ? [currentUser?.profile] : [],
+          },
+          popularProfiles,
+        }));
+      } catch (err) {
+        setProfileData((prevState) => ({
+          ...prevState,
+          currentUserProfile: {
+            results: currentUser?.profile ? [currentUser?.profile] : [],
+          },
+          popularProfiles: { results: [] },
+        }));
+      } finally {
+        setGlobalProfileDataHasLoaded(true);
+      }
+    };
+    setGlobalProfileDataHasLoaded(false);
+    fetchGlobalProfileData();
+  }, [currentUser]);
 
   return (
-    <ProfileDataContext.Provider value={{ profileData, hasProfileDataLoaded }}>
+    <ProfileDataContext.Provider
+      value={{
+        profileData,
+        pageProfileDataHasLoaded,
+        globalProfileDataHasLoaded,
+      }}
+    >
       <SetProfileDataContext.Provider
         value={{
           setProfileData,
