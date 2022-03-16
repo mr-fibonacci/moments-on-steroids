@@ -38,8 +38,8 @@ export const ProfileDataProvider = ({ children }) => {
       });
 
       setProfileData((prevState) => {
-        const pageProfile = prevState.pageProfile.results[0];
-        const currentUserProfile = prevState.currentUserProfile.results[0];
+        const [pageProfile] = prevState.pageProfile.results;
+        const [currentUserProfile] = prevState.currentUserProfile.results;
 
         const newState = Object.entries(prevState).reduce(
           (acc, [key, value]) => {
@@ -79,8 +79,8 @@ export const ProfileDataProvider = ({ children }) => {
       await axiosRes.delete(`/followers/${clickedProfile.following_id}/`);
 
       setProfileData((prevState) => {
-        const pageProfile = prevState.pageProfile.results[0];
-        const currentUserProfile = prevState.currentUserProfile.results[0];
+        const [pageProfile] = prevState.pageProfile.results;
+        const [currentUserProfile] = prevState.currentUserProfile.results;
 
         const newState = Object.entries(prevState).reduce(
           (acc, [key, value]) => {

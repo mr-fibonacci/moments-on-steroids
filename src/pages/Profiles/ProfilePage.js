@@ -32,6 +32,8 @@ function ProfilePage() {
 
   const { profileData, hasProfileDataLoaded } = useProfileData();
   const { pageProfile, followingProfiles, followedProfiles } = profileData;
+  const [profile] = pageProfile.results;
+
   const { setProfileData, handleFollow, handleUnfollow } = useSetProfileData();
 
   const [profilePosts, setProfilePosts] = useState({ results: [] });
@@ -63,55 +65,49 @@ function ProfilePage() {
         <Container className={appStyles.Content}>
           {hasProfileDataLoaded ? (
             <>
-              {pageProfile?.results[0]?.is_owner && (
-                <ProfileEditDropdown id={pageProfile?.results[0]?.id} />
-              )}
+              {profile?.is_owner && <ProfileEditDropdown id={profile?.id} />}
               <Row noGutters className="px-3">
                 <Col lg={3} className="text-center text-lg-left">
                   <Image
                     className="ProfileImage"
                     roundedCircle
-                    src={pageProfile?.results[0]?.image}
+                    src={profile?.image}
                   />
                 </Col>
                 <Col lg={6} className="text-center">
-                  <h3 className="m-2">{pageProfile?.results[0]?.owner}</h3>
+                  <h3 className="m-2">{profile?.owner}</h3>
 
                   <Row className="text-center justify-content-center no-gutters">
                     <Col xs={3} className="my-2">
-                      <div>{pageProfile?.results[0]?.posts_count}</div>
+                      <div>{profile?.posts_count}</div>
                       <div>posts</div>
                     </Col>
                     <Col xs={3} className="my-2">
-                      <div>{pageProfile?.results[0]?.followers_count}</div>
+                      <div>{profile?.followers_count}</div>
                       <div>followers</div>
                     </Col>
                     <Col xs={3} className="my-2">
-                      <div>{pageProfile?.results[0]?.following_count}</div>
+                      <div>{profile?.following_count}</div>
                       <div>following</div>
                     </Col>
                   </Row>
                 </Col>
                 <Col lg={3} className="text-center text-lg-right">
-                  {!pageProfile?.results[0]?.is_owner && (
+                  {!profile?.is_owner && (
                     <>
                       {currentUser &&
-                        (pageProfile?.results[0]?.following_id ? (
+                        (profile?.following_id ? (
                           <Button
                             className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
-                            onClick={() =>
-                              handleUnfollow(pageProfile?.results[0])
-                            }
+                            onClick={() => handleUnfollow(profile)}
                           >
                             unfollow
                           </Button>
                         ) : (
-                          !pageProfile?.results[0]?.is_owner && (
+                          !profile?.is_owner && (
                             <Button
                               className={`${btnStyles.Button} ${btnStyles.Black}`}
-                              onClick={() =>
-                                handleFollow(pageProfile?.results[0])
-                              }
+                              onClick={() => handleFollow(profile)}
                             >
                               follow
                             </Button>
@@ -120,10 +116,8 @@ function ProfilePage() {
                     </>
                   )}
                 </Col>
-                {pageProfile?.results[0]?.content && (
-                  <Col className="text-center p-3">
-                    {pageProfile?.results[0].content}
-                  </Col>
+                {profile?.content && (
+                  <Col className="text-center p-3">{profile.content}</Col>
                 )}
               </Row>
               <hr />
@@ -147,7 +141,7 @@ function ProfilePage() {
                       ) : (
                         <Asset
                           noResults
-                          message={`No results found, ${pageProfile?.results[0]?.owner} hasn't posted yet.`}
+                          message={`No results found, ${profile?.owner} hasn't posted yet.`}
                         />
                       )}
                     </InfiniteScroll>
@@ -177,7 +171,7 @@ function ProfilePage() {
                       ) : (
                         <Asset
                           noResults
-                          message={`No profiles found, no users are following ${pageProfile?.results[0]?.owner} yet.`}
+                          message={`No profiles found, no users are following ${profile?.owner} yet.`}
                         />
                       )}
                     </Container>
@@ -205,7 +199,7 @@ function ProfilePage() {
                       ) : (
                         <Asset
                           noResults
-                          message={`No profiles found, ${pageProfile?.results[0]?.owner} isn't following anyone yet.`}
+                          message={`No profiles found, ${profile?.owner} isn't following anyone yet.`}
                         />
                       )}
                     </Container>
