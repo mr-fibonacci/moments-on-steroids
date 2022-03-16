@@ -12,10 +12,13 @@ import FilterSlider from "../../components/FilterSlider";
 import appStyles from "../../App.module.css";
 
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
+import Asset from "../../components/Asset";
 
 function PostEditForm() {
   const { id } = useParams();
   const history = useHistory();
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   const [postData, setPostData] = useState({
     title: "",
     content: "",
@@ -41,9 +44,16 @@ function PostEditForm() {
         });
       } catch (err) {
         console.log(err.response);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          fetchingError: true,
+        }));
+      } finally {
+        setHasLoaded(true);
       }
     };
 
+    setHasLoaded(false);
     handleMount();
   }, [history, id]);
 
@@ -121,58 +131,64 @@ function PostEditForm() {
     </div>
   );
 
-  return (
-    <Form onSubmit={handleSubmit}>
-      <Row>
-        <Col className="py-2 p-0 p-md-2" md={7} lg={8}>
-          <Container className={appStyles.Content}>
-            <Form.Group className="text-center">
-              {image && (
-                <figure className={image_filter}>
-                  <Image className={appStyles.Image} src={image} />
-                </figure>
-              )}
-              {errors?.image?.map((message, idx) => (
-                <Alert variant="warning" key={idx}>
-                  {message}
-                </Alert>
-              ))}
-              <div>
-                <Form.Label
-                  className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
-                  htmlFor="image-upload"
-                >
-                  Change the image
-                </Form.Label>
-              </div>
-              <FilterSlider
-                image={image}
-                image_filter={image_filter}
-                handleClick={handleClick}
-              />
-              <Form.File
-                id="image-upload"
-                ref={imageFile}
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files.length) {
-                    setPostData({
-                      ...postData,
-                      image_filter: "normal",
-                      image: URL.createObjectURL(e.target.files[0]),
-                    });
-                  }
-                }}
-              />
-            </Form.Group>
-            <div className="d-md-none">{textFields}</div>
-          </Container>
-        </Col>
-        <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
-          <Container className={appStyles.Content}>{textFields}</Container>
-        </Col>
-      </Row>
-    </Form>
+  return hasLoaded ? (
+    errors?.fetchingError ? (
+      <Asset noResults message="Apologies, unable to fetch the given post." />
+    ) : (
+      <Form onSubmit={handleSubmit}>
+        <Row>
+          <Col className="py-2 p-0 p-md-2" md={7} lg={8}>
+            <Container className={appStyles.Content}>
+              <Form.Group className="text-center">
+                {image && (
+                  <figure className={image_filter}>
+                    <Image className={appStyles.Image} src={image} />
+                  </figure>
+                )}
+                {errors?.image?.map((message, idx) => (
+                  <Alert variant="warning" key={idx}>
+                    {message}
+                  </Alert>
+                ))}
+                <div>
+                  <Form.Label
+                    className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
+                    htmlFor="image-upload"
+                  >
+                    Change the image
+                  </Form.Label>
+                </div>
+                <FilterSlider
+                  image={image}
+                  image_filter={image_filter}
+                  handleClick={handleClick}
+                />
+                <Form.File
+                  id="image-upload"
+                  ref={imageFile}
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files.length) {
+                      setPostData({
+                        ...postData,
+                        image_filter: "normal",
+                        image: URL.createObjectURL(e.target.files[0]),
+                      });
+                    }
+                  }}
+                />
+              </Form.Group>
+              <div className="d-md-none">{textFields}</div>
+            </Container>
+          </Col>
+          <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
+            <Container className={appStyles.Content}>{textFields}</Container>
+          </Col>
+        </Row>
+      </Form>
+    )
+  ) : (
+    <Asset spinner />
   );
 }
 

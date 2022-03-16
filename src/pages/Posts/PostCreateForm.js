@@ -38,10 +38,9 @@ function PostCreateForm() {
 
     try {
       const { data } = await axiosReq.post("/posts/", formData);
-      console.log("data", data);
-      history.push("/");
+      history.push(`/posts/${data.id}`);
     } catch (err) {
-      console.log("ERROR", err.request);
+      console.log(err.request);
       setErrors(err.response?.data);
     }
   };

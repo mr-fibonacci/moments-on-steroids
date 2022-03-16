@@ -18,10 +18,15 @@ import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 function PostPage() {
   const currentUser = useCurrentUser();
   const profile_image = currentUser?.profile_image;
+
   const { id } = useParams();
   const history = useHistory();
+
   const [post, setPost] = useState({ results: [] });
   const [comments, setComments] = useState({ results: [] });
+
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   useEffect(() => {
     const handleMount = async () => {
       try {
@@ -34,9 +39,16 @@ function PostPage() {
         setComments(comments);
       } catch (err) {
         console.log(err.request);
+        setPost((prevPost) => ({
+          ...prevPost,
+          fetchingError: true,
+        }));
+      } finally {
+        setHasLoaded(true);
       }
     };
 
+    setHasLoaded(false);
     handleMount();
   }, [id]);
 
@@ -57,49 +69,64 @@ function PostPage() {
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
         <PopularProfiles mobile />
-        <Post
-          {...post.results[0]}
-          setPosts={setPost}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-          postPage
-        />
-        <Container className={appStyles.Content}>
-          {currentUser ? (
-            <>
-              <CommentCreateForm
-                profile_id={currentUser.profile_id}
-                profileImage={profile_image}
-                post={id}
-                setPost={setPost}
-                setComments={setComments}
+        {hasLoaded ? (
+          post?.fetchingError ? (
+            <Container className={appStyles.Content}>
+              <Asset
+                noResults
+                message="Apologies, unable to fetch the given post."
               />
-            </>
-          ) : comments.results.length ? (
-            "Comments"
-          ) : null}
-
-          {comments.results.length ? (
-            <InfiniteScroll
-              dataLength={comments.results.length}
-              next={() => fetchMoreData(comments, setComments)}
-              hasMore={!!comments.next}
-              loader={<Asset spinner />}
-              children={comments.results.map((comment) => (
-                <Comment
-                  key={comment.id}
-                  setPost={setPost}
-                  {...comment}
-                  setComments={setComments}
-                />
-              ))}
-            />
-          ) : currentUser ? (
-            "No comments yet, be the first one to comment!"
+            </Container>
           ) : (
-            <span>No comments...</span>
-          )}
-        </Container>
+            <>
+              <Post
+                {...post.results[0]}
+                setPosts={setPost}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+                postPage
+              />
+              <Container className={appStyles.Content}>
+                {currentUser ? (
+                  <>
+                    <CommentCreateForm
+                      profile_id={currentUser.profile_id}
+                      profileImage={profile_image}
+                      post={id}
+                      setPost={setPost}
+                      setComments={setComments}
+                    />
+                  </>
+                ) : comments.results.length ? (
+                  "Comments"
+                ) : null}
+
+                {comments.results.length ? (
+                  <InfiniteScroll
+                    dataLength={comments.results.length}
+                    next={() => fetchMoreData(comments, setComments)}
+                    hasMore={!!comments.next}
+                    loader={<Asset spinner />}
+                    children={comments.results.map((comment) => (
+                      <Comment
+                        key={comment.id}
+                        setPost={setPost}
+                        {...comment}
+                        setComments={setComments}
+                      />
+                    ))}
+                  />
+                ) : currentUser ? (
+                  "No comments yet, be the first one to comment!"
+                ) : (
+                  <span>No comments...</span>
+                )}
+              </Container>
+            </>
+          )
+        ) : (
+          <Asset spinner />
+        )}
       </Col>
       <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
         <PopularProfiles />

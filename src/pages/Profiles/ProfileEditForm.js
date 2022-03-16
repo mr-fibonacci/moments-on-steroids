@@ -11,11 +11,14 @@ import appStyles from "../../App.module.css";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
+import Asset from "../../components/Asset";
 
 function ProfileEditForm() {
-  const setCurrentUser = useSetCurrentUser();
   const { id } = useParams();
   const history = useHistory();
+  const setCurrentUser = useSetCurrentUser();
+
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [profileData, setProfileData] = useState({
     name: "",
     content: "",
@@ -30,17 +33,19 @@ function ProfileEditForm() {
       try {
         const { data } = await axiosReq.get(`/profiles/${id}/`);
         const { name, content, image, is_owner } = data;
-
         if (is_owner) {
           setProfileData({ name, content, image });
         } else {
           history.goBack();
         }
+        setHasLoaded(true);
       } catch (err) {
         console.log(err.request);
+        history.goBack();
       }
     };
 
+    setHasLoaded(false);
     handleMount();
   }, [history, id]);
 
@@ -103,7 +108,7 @@ function ProfileEditForm() {
     </>
   );
 
-  return (
+  return hasLoaded ? (
     <Form onSubmit={handleSubmit}>
       <Row>
         <Col className="py-2 p-0 p-md-2 text-center" md={7} lg={6}>
@@ -150,6 +155,8 @@ function ProfileEditForm() {
         </Col>
       </Row>
     </Form>
+  ) : (
+    <Asset spinner />
   );
 }
 

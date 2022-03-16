@@ -148,7 +148,7 @@ export const ProfileDataProvider = ({ children }) => {
       } catch (err) {
         setProfileData((prevState) => ({
           ...prevState,
-          pageProfile: { results: [] },
+          pageProfile: { fetchingError: true, results: [] },
           followedProfiles: { results: [] },
           followingProfiles: { results: [] },
         }));

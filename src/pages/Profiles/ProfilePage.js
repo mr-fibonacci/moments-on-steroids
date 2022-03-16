@@ -64,149 +64,158 @@ function ProfilePage() {
         <PopularProfiles mobile={true} />
         <Container className={appStyles.Content}>
           {pageProfileDataHasLoaded ? (
-            <>
-              {profile?.is_owner && <ProfileEditDropdown id={profile?.id} />}
-              <Row noGutters className="px-3">
-                <Col lg={3} className="text-center text-lg-left">
-                  <Image
-                    className="ProfileImage"
-                    roundedCircle
-                    src={profile?.image}
-                  />
-                </Col>
-                <Col lg={6} className="text-center">
-                  <h3 className="m-2">{profile?.owner}</h3>
+            pageProfile?.fetchingError ? (
+              <Asset
+                noResults
+                message="Apologies, unable to fetch the given profile."
+              />
+            ) : (
+              <>
+                {profile?.is_owner && <ProfileEditDropdown id={profile?.id} />}
+                <Row noGutters className="px-3">
+                  <Col lg={3} className="text-center text-lg-left">
+                    <Image
+                      className="ProfileImage"
+                      roundedCircle
+                      src={profile?.image}
+                    />
+                  </Col>
+                  <Col lg={6} className="text-center">
+                    <h3 className="m-2">{profile?.owner}</h3>
 
-                  <Row className="text-center justify-content-center no-gutters">
-                    <Col xs={3} className="my-2">
-                      <div>{profile?.posts_count}</div>
-                      <div>posts</div>
-                    </Col>
-                    <Col xs={3} className="my-2">
-                      <div>{profile?.followers_count}</div>
-                      <div>followers</div>
-                    </Col>
-                    <Col xs={3} className="my-2">
-                      <div>{profile?.following_count}</div>
-                      <div>following</div>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col lg={3} className="text-center text-lg-right">
-                  {!profile?.is_owner && (
-                    <>
-                      {currentUser &&
-                        (profile?.following_id ? (
-                          <Button
-                            className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
-                            onClick={() => handleUnfollow(profile)}
-                          >
-                            unfollow
-                          </Button>
-                        ) : (
-                          !profile?.is_owner && (
+                    <Row className="text-center justify-content-center no-gutters">
+                      <Col xs={3} className="my-2">
+                        <div>{profile?.posts_count}</div>
+                        <div>posts</div>
+                      </Col>
+                      <Col xs={3} className="my-2">
+                        <div>{profile?.followers_count}</div>
+                        <div>followers</div>
+                      </Col>
+                      <Col xs={3} className="my-2">
+                        <div>{profile?.following_count}</div>
+                        <div>following</div>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col lg={3} className="text-center text-lg-right">
+                    {!profile?.is_owner && (
+                      <>
+                        {currentUser &&
+                          (profile?.following_id ? (
                             <Button
-                              className={`${btnStyles.Button} ${btnStyles.Black}`}
-                              onClick={() => handleFollow(profile)}
+                              className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
+                              onClick={() => handleUnfollow(profile)}
                             >
-                              follow
+                              unfollow
                             </Button>
-                          )
-                        ))}
-                    </>
+                          ) : (
+                            !profile?.is_owner && (
+                              <Button
+                                className={`${btnStyles.Button} ${btnStyles.Black}`}
+                                onClick={() => handleFollow(profile)}
+                              >
+                                follow
+                              </Button>
+                            )
+                          ))}
+                      </>
+                    )}
+                  </Col>
+                  {profile?.content && (
+                    <Col className="text-center p-3">{profile.content}</Col>
                   )}
-                </Col>
-                {profile?.content && (
-                  <Col className="text-center p-3">{profile.content}</Col>
-                )}
-              </Row>
-              <hr />
-              <Tabs variant="pills">
-                <Tab eventKey="posts" title="posts">
-                  {profilePostsHaveLoaded ? (
+                </Row>
+                <hr />
+                <Tabs variant="pills">
+                  <Tab eventKey="posts" title="posts">
+                    {profilePostsHaveLoaded ? (
+                      <InfiniteScroll
+                        dataLength={profilePosts?.results.length}
+                        next={() =>
+                          fetchMoreData(profilePosts, setProfilePosts)
+                        }
+                        hasMore={!!profilePosts.next}
+                        loader={<Asset spinner />}
+                      >
+                        {profilePosts?.results.length ? (
+                          profilePosts?.results.map((post) => (
+                            <Post
+                              key={post.id}
+                              {...post}
+                              setPosts={setProfilePosts}
+                            />
+                          ))
+                        ) : (
+                          <Asset
+                            noResults
+                            message={`No results found, ${profile?.owner} hasn't posted yet.`}
+                          />
+                        )}
+                      </InfiniteScroll>
+                    ) : (
+                      <Asset spinner />
+                    )}
+                  </Tab>
+                  <Tab eventKey="followers" title="followers">
                     <InfiniteScroll
-                      dataLength={profilePosts?.results.length}
-                      next={() => fetchMoreData(profilePosts, setProfilePosts)}
-                      hasMore={!!profilePosts.next}
+                      dataLength={followedProfiles?.results.length}
+                      next={() =>
+                        fetchMoreDataState(followedProfiles, setProfileData)
+                      }
+                      hasMore={!!followedProfiles.next}
                       loader={<Asset spinner />}
                     >
-                      {profilePosts?.results.length ? (
-                        profilePosts?.results.map((post) => (
-                          <Post
-                            key={post.id}
-                            {...post}
-                            setPosts={setProfilePosts}
+                      <Container fluid>
+                        {followedProfiles?.results.length ? (
+                          followedProfiles?.results.map((profile) => (
+                            <Profile
+                              key={profile.id}
+                              profile={profile}
+                              handleFollow={() => handleFollow(profile)}
+                              handleUnfollow={() => handleUnfollow(profile)}
+                            />
+                          ))
+                        ) : (
+                          <Asset
+                            noResults
+                            message={`No profiles found, no users are following ${profile?.owner} yet.`}
                           />
-                        ))
-                      ) : (
-                        <Asset
-                          noResults
-                          message={`No results found, ${profile?.owner} hasn't posted yet.`}
-                        />
-                      )}
+                        )}
+                      </Container>
                     </InfiniteScroll>
-                  ) : (
-                    <Asset spinner />
-                  )}
-                </Tab>
-                <Tab eventKey="followers" title="followers">
-                  <InfiniteScroll
-                    dataLength={followedProfiles?.results.length}
-                    next={() =>
-                      fetchMoreDataState(followedProfiles, setProfileData)
-                    }
-                    hasMore={!!followedProfiles.next}
-                    loader={<Asset spinner />}
-                  >
-                    <Container fluid>
-                      {followedProfiles?.results.length ? (
-                        followedProfiles?.results.map((profile) => (
-                          <Profile
-                            key={profile.id}
-                            profile={profile}
-                            handleFollow={() => handleFollow(profile)}
-                            handleUnfollow={() => handleUnfollow(profile)}
+                  </Tab>
+                  <Tab eventKey="following" title="following">
+                    <InfiniteScroll
+                      dataLength={followingProfiles?.results?.length}
+                      next={() =>
+                        fetchMoreDataState(followingProfiles, setProfileData)
+                      }
+                      hasMore={!!followingProfiles.next}
+                      loader={<Asset spinner />}
+                    >
+                      <Container fluid>
+                        {followingProfiles?.results.length ? (
+                          followingProfiles?.results.map((profile) => (
+                            <Profile
+                              key={profile.id}
+                              profile={profile}
+                              handleFollow={() => handleFollow(profile)}
+                              handleUnfollow={() => handleUnfollow(profile)}
+                            />
+                          ))
+                        ) : (
+                          <Asset
+                            noResults
+                            message={`No profiles found, ${profile?.owner} isn't following anyone yet.`}
                           />
-                        ))
-                      ) : (
-                        <Asset
-                          noResults
-                          message={`No profiles found, no users are following ${profile?.owner} yet.`}
-                        />
-                      )}
-                    </Container>
-                  </InfiniteScroll>
-                </Tab>
-                <Tab eventKey="following" title="following">
-                  <InfiniteScroll
-                    dataLength={followingProfiles?.results?.length}
-                    next={() =>
-                      fetchMoreDataState(followingProfiles, setProfileData)
-                    }
-                    hasMore={!!followingProfiles.next}
-                    loader={<Asset spinner />}
-                  >
-                    <Container fluid>
-                      {followingProfiles?.results.length ? (
-                        followingProfiles?.results.map((profile) => (
-                          <Profile
-                            key={profile.id}
-                            profile={profile}
-                            handleFollow={() => handleFollow(profile)}
-                            handleUnfollow={() => handleUnfollow(profile)}
-                          />
-                        ))
-                      ) : (
-                        <Asset
-                          noResults
-                          message={`No profiles found, ${profile?.owner} isn't following anyone yet.`}
-                        />
-                      )}
-                    </Container>
-                  </InfiniteScroll>
-                </Tab>
-              </Tabs>
-            </>
+                        )}
+                      </Container>
+                    </InfiniteScroll>
+                  </Tab>
+                </Tabs>
+              </>
+            )
           ) : (
             <Asset spinner />
           )}
