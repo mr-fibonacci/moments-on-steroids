@@ -26,13 +26,7 @@ const PopularProfiles = ({ mobile }) => {
           <div className="my-1">Most followed profiles.</div>
           <Swiper
             style={{ marginLeft: "-10px", marginRight: "-10px" }}
-            breakpoints={{
-              200: { slidesPerView: 2.5 },
-              320: { slidesPerView: 3.5 },
-              480: { slidesPerView: 4.5 },
-              576: { slidesPerView: 4.5 },
-              768: { slidesPerView: 5.5 },
-            }}
+            slidesPerView={3.5}
           >
             {popularProfiles?.results?.map((profile) => (
               <SwiperSlide key={profile.id}>
