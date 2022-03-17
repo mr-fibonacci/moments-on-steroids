@@ -107,7 +107,7 @@ function Post(props) {
             </OverlayTrigger>
           ) : like_id ? (
             <span onClick={handleUnlike}>
-              <Icon heart />
+              <Icon heart liked />
             </span>
           ) : currentUser ? (
             <span onClick={handleLike}>

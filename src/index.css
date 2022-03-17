@@ -1,0 +1,7 @@
+.navbar-nav a {
+  padding: 5px 0px;
+}
+
+a:hover path {
+  fill: #2142b2;
+}

@@ -27,7 +27,7 @@ function MoreDropdown({ handleAdd, handleEdit, handleDelete }) {
         </Dropdown.Item>
         {handleDelete && (
           <Dropdown.Item className={styles.DropdownItem} onClick={handleDelete}>
-            <Icon delete />
+            <Icon remove />
           </Dropdown.Item>
         )}
       </Dropdown.Menu>

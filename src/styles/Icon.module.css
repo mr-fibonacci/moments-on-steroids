@@ -1,21 +1,38 @@
 .Icon {
   padding: 0px 5px;
+  cursor: pointer;
 }
 
 .NavIcon {
   display: block;
 }
 
-.Icon:hover {
-  cursor: pointer;
+path {
+  transition: fill 0.3s ease-in-out;
+}
+
+g {
+  opacity: 1;
+}
+
+path {
+  fill: #d1d9df;
 }
 
 .Icon:hover path {
   fill: #2142b2;
 }
 
-.Icon:hover g {
-  opacity: 1;
+.Heart:hover path {
+  fill: #f85032;
+}
+
+.Liked path {
+  fill: #f85032;
+}
+
+.Liked:hover path {
+  fill: #d1d9df;
 }
 
 .Icon svg {

@@ -16,6 +16,7 @@ import { useCurrentUser } from "./contexts/CurrentUserContext";
 import UsernameForm from "./pages/Profiles/UsernameForm";
 import UserPasswordForm from "./pages/Profiles/UserPasswordForm";
 import NotFound from "./components/NotFound";
+import "./index.css";
 
 function App() {
   const currentUser = useCurrentUser();

@@ -22,6 +22,7 @@ function Icon(props) {
     home,
     feed,
     heart,
+    liked,
     signUp,
     signIn,
     signOut,
@@ -83,7 +84,9 @@ function Icon(props) {
     <span
       {...props}
       aria-label={label}
-      className={`${styles.Icon} ${nav ? styles.NavIcon : ""}`}
+      className={`${styles.Icon} ${heart && styles.Heart} ${
+        liked && styles.Liked
+      } ${nav && styles.NavIcon}`}
     >
       <span className="mx-1">{component}</span>
       <span>{text}</span>
