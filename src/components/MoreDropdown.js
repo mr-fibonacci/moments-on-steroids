@@ -47,15 +47,20 @@ export function ProfileEditDropdown({ id }) {
     >
       <Dropdown.Toggle as={ThreeDots} />
       <Dropdown.Menu className="p-0">
-        <Dropdown.Item onClick={() => history.push(`/profiles/${id}/edit`)}>
+        <Dropdown.Item
+          className="p-2"
+          onClick={() => history.push(`/profiles/${id}/edit`)}
+        >
           <Icon user text="edit profile" />
         </Dropdown.Item>
         <Dropdown.Item
+          className="p-2"
           onClick={() => history.push(`/profiles/${id}/edit/username`)}
         >
           <Icon editSquare text="change username" />
         </Dropdown.Item>
         <Dropdown.Item
+          className="p-2"
           onClick={() => history.push(`/profiles/${id}/edit/password`)}
         >
           <Icon password text="change password" />

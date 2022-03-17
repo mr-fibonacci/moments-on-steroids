@@ -13,6 +13,7 @@ import { ReactComponent as Edit } from "../assets/edit.svg";
 import { ReactComponent as Remove } from "../assets/remove.svg";
 
 import { ReactComponent as Comment } from "../assets/comment.svg";
+import { ReactComponent as Camera } from "../assets/camera.svg";
 
 import { ReactComponent as User } from "../assets/user.svg";
 import { ReactComponent as Key } from "../assets/key.svg";
@@ -34,6 +35,7 @@ function Icon(props) {
     edit,
     remove,
     comment,
+    camera,
     user,
     password,
     editSquare,
@@ -85,6 +87,10 @@ function Icon(props) {
   if (comment) {
     component = <Comment />;
     label = "comments";
+  }
+  if (camera) {
+    component = <Camera />;
+    label = "camera";
   }
 
   if (user) {

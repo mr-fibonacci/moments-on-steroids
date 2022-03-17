@@ -126,7 +126,8 @@ function Post(props) {
             <Icon comment />
           </Link>
           {comments_count}
-          <span className="mx-2">{`#${image_filter}`}</span>
+          <span className="ml-3">{`#${image_filter}`}</span>
+          <Icon camera />
         </div>
       </Card.Body>
     </Card>
