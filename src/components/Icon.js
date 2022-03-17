@@ -14,6 +14,10 @@ import { ReactComponent as Remove } from "../assets/remove.svg";
 
 import { ReactComponent as Comment } from "../assets/comment.svg";
 
+import { ReactComponent as User } from "../assets/user.svg";
+import { ReactComponent as Key } from "../assets/key.svg";
+import { ReactComponent as EditSquare } from "../assets/edit-square.svg";
+
 function Icon(props) {
   const {
     text,
@@ -30,6 +34,9 @@ function Icon(props) {
     edit,
     remove,
     comment,
+    user,
+    password,
+    editSquare,
   } = props;
   let component, label;
 
@@ -78,6 +85,21 @@ function Icon(props) {
   if (comment) {
     component = <Comment />;
     label = "comments";
+  }
+
+  if (user) {
+    component = <User />;
+    label = "user";
+  }
+
+  if (password) {
+    component = <Key />;
+    label = "password";
+  }
+
+  if (editSquare) {
+    component = <EditSquare />;
+    label = "edit";
   }
 
   return (

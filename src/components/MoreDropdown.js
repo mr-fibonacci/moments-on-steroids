@@ -21,7 +21,7 @@ function MoreDropdown({ handleAdd, handleEdit, handleDelete }) {
   return (
     <Dropdown className="ml-auto" drop="left">
       <Dropdown.Toggle as={ThreeDots} />
-      <Dropdown.Menu className="text-center">
+      <Dropdown.Menu className="text-center p-0">
         <Dropdown.Item className={styles.DropdownItem} onClick={handleEdit}>
           <Icon edit />
         </Dropdown.Item>
@@ -46,19 +46,19 @@ export function ProfileEditDropdown({ id }) {
       drop="left"
     >
       <Dropdown.Toggle as={ThreeDots} />
-      <Dropdown.Menu>
+      <Dropdown.Menu className="p-0">
         <Dropdown.Item onClick={() => history.push(`/profiles/${id}/edit`)}>
-          edit profile
+          <Icon user text="edit profile" />
         </Dropdown.Item>
         <Dropdown.Item
           onClick={() => history.push(`/profiles/${id}/edit/username`)}
         >
-          change username
+          <Icon editSquare text="change username" />
         </Dropdown.Item>
         <Dropdown.Item
           onClick={() => history.push(`/profiles/${id}/edit/password`)}
         >
-          change password
+          <Icon password text="change password" />
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
