@@ -74,7 +74,7 @@ function Post(props) {
             {owner}
           </Link>
           <div className="d-flex">
-            <span>{updated_at}</span>
+            <span className="my-auto">{updated_at}</span>
             {is_owner && postPage && (
               <MoreDropdown
                 handleEdit={handleEdit}
