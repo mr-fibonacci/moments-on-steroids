@@ -27,14 +27,14 @@ function Profile(props) {
   const is_owner = currentUser?.username === owner;
 
   const statsIcons = (
-    <div className="d-flex justify-content-between text-center">
-      <Link className="px-2" to={`/profiles/${id}`}>
+    <div className="d-flex px-2 justify-content-between text-center">
+      <Link to={`/profiles/${id}`}>
         <Icon post text={posts_count} />
       </Link>
-      <Link className="px-2" to={`/profiles/${id}`}>
+      <Link to={`/profiles/${id}`}>
         <Icon threeUsers text={followers_count} />
       </Link>
-      <Link className="px-2" to={`/profiles/${id}`}>
+      <Link to={`/profiles/${id}`}>
         <Icon twoUsers text={following_count} />
       </Link>
     </div>
@@ -56,8 +56,8 @@ function Profile(props) {
         </Link>
         {stats && <div className="d-none d-md-block">{statsIcons}</div>}
         <div>
-          {currentUser &&
-            (following_id ? (
+          {currentUser ? (
+            following_id ? (
               <Button
                 className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
                 onClick={() => handleUnfollow(profile)}
@@ -73,7 +73,14 @@ function Profile(props) {
               </Button>
             ) : (
               <div className={`${btnStyles.Button} invisible`} />
-            ))}
+            )
+          ) : stats ? (
+            <div
+              className={`${btnStyles.Button} d-xs-block d-md-none invisible`}
+            />
+          ) : (
+            <div className={`${btnStyles.Button} invisible`} />
+          )}
         </div>
       </div>
       <div className={stats ? "d-md-none pt-1" : "d-block pt-1"}>
