@@ -56,15 +56,18 @@ const PopularProfiles = ({ mobile }) => {
         <Asset spinner />
       ) : (
         <>
-          <p>Most followed profiles.</p>
+          <p className="text-center mt-2">Most followed profiles.</p>
           {popularProfiles?.results?.map((profile) => (
-            <Profile
-              key={profile.id}
-              profile={profile}
-              stats={false}
-              handleFollow={() => handleFollow(profile)}
-              handleUnfollow={() => handleUnfollow(profile)}
-            />
+            <>
+              <hr />
+              <Profile
+                key={profile.id}
+                profile={profile}
+                stats={false}
+                handleFollow={() => handleFollow(profile)}
+                handleUnfollow={() => handleUnfollow(profile)}
+              />
+            </>
           ))}
         </>
       )}

@@ -19,6 +19,10 @@ import { ReactComponent as User } from "../assets/user.svg";
 import { ReactComponent as Key } from "../assets/key.svg";
 import { ReactComponent as EditSquare } from "../assets/edit-square.svg";
 
+import { ReactComponent as PostIcon } from "../assets/post.svg";
+import { ReactComponent as TwoUsers } from "../assets/2-user.svg";
+import { ReactComponent as ThreeUsers } from "../assets/3-user.svg";
+
 function Icon(props) {
   const {
     text,
@@ -39,6 +43,9 @@ function Icon(props) {
     user,
     password,
     editSquare,
+    post,
+    twoUsers,
+    threeUsers,
   } = props;
   let component, label;
 
@@ -106,6 +113,21 @@ function Icon(props) {
   if (editSquare) {
     component = <EditSquare />;
     label = "edit";
+  }
+
+  if (post) {
+    component = <PostIcon />;
+    label = "post";
+  }
+
+  if (twoUsers) {
+    component = <TwoUsers />;
+    label = "two users";
+  }
+
+  if (threeUsers) {
+    component = <ThreeUsers />;
+    label = "three users";
   }
 
   return (

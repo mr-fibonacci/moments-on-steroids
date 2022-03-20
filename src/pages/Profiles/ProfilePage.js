@@ -129,6 +129,7 @@ function ProfilePage() {
                 <hr />
                 <Tabs variant="pills">
                   <Tab eventKey="posts" title="posts">
+                    <hr />
                     {profilePostsHaveLoaded ? (
                       <InfiniteScroll
                         dataLength={profilePosts?.results.length}
@@ -158,6 +159,7 @@ function ProfilePage() {
                     )}
                   </Tab>
                   <Tab eventKey="followers" title="followers">
+                    <hr />
                     <InfiniteScroll
                       dataLength={followedProfiles?.results.length}
                       next={() =>
@@ -168,13 +170,16 @@ function ProfilePage() {
                     >
                       <Container fluid>
                         {followedProfiles?.results.length ? (
-                          followedProfiles?.results.map((profile) => (
-                            <Profile
-                              key={profile.id}
-                              profile={profile}
-                              handleFollow={() => handleFollow(profile)}
-                              handleUnfollow={() => handleUnfollow(profile)}
-                            />
+                          followedProfiles?.results.map((profile, idx) => (
+                            <>
+                              {idx ? <hr /> : null}
+                              <Profile
+                                key={profile.id}
+                                profile={profile}
+                                handleFollow={() => handleFollow(profile)}
+                                handleUnfollow={() => handleUnfollow(profile)}
+                              />
+                            </>
                           ))
                         ) : (
                           <Asset
@@ -186,6 +191,7 @@ function ProfilePage() {
                     </InfiniteScroll>
                   </Tab>
                   <Tab eventKey="following" title="following">
+                    <hr />
                     <InfiniteScroll
                       dataLength={followingProfiles?.results?.length}
                       next={() =>
@@ -196,13 +202,16 @@ function ProfilePage() {
                     >
                       <Container fluid>
                         {followingProfiles?.results.length ? (
-                          followingProfiles?.results.map((profile) => (
-                            <Profile
-                              key={profile.id}
-                              profile={profile}
-                              handleFollow={() => handleFollow(profile)}
-                              handleUnfollow={() => handleUnfollow(profile)}
-                            />
+                          followingProfiles?.results.map((profile, idx) => (
+                            <>
+                              {idx ? <hr /> : null}
+                              <Profile
+                                key={profile.id}
+                                profile={profile}
+                                handleFollow={() => handleFollow(profile)}
+                                handleUnfollow={() => handleUnfollow(profile)}
+                              />
+                            </>
                           ))
                         ) : (
                           <Asset

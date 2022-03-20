@@ -12,6 +12,7 @@ import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 import Asset from "../../components/Asset";
+import styles from "../../styles/ProfileEditForm.module.css";
 
 function ProfileEditForm() {
   const { id } = useParams();
@@ -116,7 +117,12 @@ function ProfileEditForm() {
             <Form.Group>
               {image && (
                 <figure>
-                  <Image src={image} fluid />
+                  <Image
+                    className={styles.ProfileImage}
+                    src={image}
+                    fluid
+                    roundedCircle
+                  />
                 </figure>
               )}
               {errors?.image?.map((message, idx) => (
